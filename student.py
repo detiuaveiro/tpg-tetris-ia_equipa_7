@@ -9,6 +9,7 @@ import websockets
 from shape import Shape
 import common
 import treeSearch
+import Agent
 
 inputs = ["w", "a", "d"]
 oppt_act = {"a": "d", "d": "a"}
@@ -17,12 +18,12 @@ class Node:
         pass
 #class Piece:
 
-def next_position(self, position,action):
-    x,y = position
-    if action == "a":
-        return [x - 1, y]
-    elif action == "d":
-        return [x + 1, y]
+#def next_position(self, position,action):
+#    x,y = position
+#    if action == "a":
+#        return [x - 1, y]
+#    elif action == "d":
+#        return [x + 1, y]
 
 async def agent_loop(server_address="localhost:8000", agent_name="student"):
     async with websockets.connect(f"ws://{server_address}/player") as websocket:
