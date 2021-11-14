@@ -8,6 +8,8 @@ import websockets
 
 from shape import Shape
 import common
+import treeSearch
+
 inputs = ["w", "a", "d"]
 oppt_act = {"a": "d", "d": "a"}
 class Node:
@@ -15,7 +17,7 @@ class Node:
         pass
 #class Piece:
 
-def next_position(position,action):
+def next_position(self, position,action):
     x,y = position
     if action == "a":
         return [x - 1, y]
@@ -37,7 +39,8 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
 
 
                 key = ""
-
+                
+                
                 await websocket.send(
                     json.dumps({"cmd": "key", "key": key}))  # send key command to server - you must implement this send in the AI agent
 
