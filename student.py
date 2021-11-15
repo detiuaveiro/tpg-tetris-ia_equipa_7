@@ -9,28 +9,31 @@ import websockets
 from shape import Shape
 import common
 import treeSearch
-import Agent
+from Agent import *
 
-inputs = ["w", "a", "d"]
-oppt_act = {"a": "d", "d": "a"}
-class Node:
-    def __init__(self):
-        pass
-#class Piece:
 
-#def next_position(self, position,action):
-#    x,y = position
-#    if action == "a":
-#        return [x - 1, y]
-#    elif action == "d":
-#        return [x + 1, y]
+# inputs = ["w", "a", "d"]
+# oppt_act = {"a": "d", "d": "a"}
+# class Node:
+#     def __init__(self):
+#         pass
+# #class Piece:
+
+# def next_position(self, position,action):
+#     x,y = position
+#     if action == "a":
+#         return [x - 1, y]
+#     elif action == "d":
+#         return [x + 1, y]
+    
 
 async def agent_loop(server_address="localhost:8000", agent_name="student"):
     async with websockets.connect(f"ws://{server_address}/player") as websocket:
 
         # Receive information about static game properties
         await websocket.send(json.dumps({"cmd": "join", "name": agent_name}))
-
+        
+        primeira_it = True
         while True:
             try:
                 state = json.loads(
@@ -38,8 +41,17 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                 )  # receive game update, this must be called timely or your game will get out of sync with the server
                 #Stuff
 
-
+               
                 key = ""
+                if primeira_it:
+                    print(state['grid'])
+                    primeira_it = False
+                else:
+                    print(state['game'])
+                key = next_key(state)
+
+
+                           
                 
                 
                 await websocket.send(
