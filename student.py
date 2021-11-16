@@ -47,8 +47,12 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                     print(state['grid'])
                     primeira_it = False
                 else:
-                    print(state['game'])
-                key = next_key(state)
+                    # print(state['game'])
+                    # print(state['piece'])
+                    #print(state['next_pieces'][0])  # proxima peça
+
+                    key = next_key(state)
+                
 
 
                            
