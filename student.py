@@ -32,7 +32,7 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
 
         # Receive information about static game properties
         await websocket.send(json.dumps({"cmd": "join", "name": agent_name}))
-        
+        exist_key = False
         primeira_it = True
         while True:
             try:
@@ -41,17 +41,28 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                 )  # receive game update, this must be called timely or your game will get out of sync with the server
                 #Stuff
 
-               
+                
                 key = ""
                 if primeira_it:
-                    print(state['grid'])
+                    #print(state['grid'])
                     primeira_it = False
                 else:
-                    # print(state['game'])
-                    # print(state['piece'])
+                   # print(state['game'])
+                    print(state['piece'])
                     #print(state['next_pieces'][0])  # proxima peça
-
-                    key = next_key(state)
+                    
+                    if exist_key == False:
+                        keys = next_key(state)
+                        exist_key = True
+  
+                    if len(keys):
+                        key = keys[0]
+                        keys = keys[1:]
+                    else:
+                        exist_key = False
+                    
+                        
+                    
                 
 
 
