@@ -12,21 +12,6 @@ import treeSearch
 from Agent import *
 
 
-# inputs = ["w", "a", "d"]
-# oppt_act = {"a": "d", "d": "a"}
-# class Node:
-#     def __init__(self):
-#         pass
-# #class Piece:
-
-# def next_position(self, position,action):
-#     x,y = position
-#     if action == "a":
-#         return [x - 1, y]
-#     elif action == "d":
-#         return [x + 1, y]
-
-
 async def agent_loop(server_address="localhost:8000", agent_name="student"):
     async with websockets.connect(f"ws://{server_address}/player") as websocket:
 
@@ -56,6 +41,8 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                         print(state['next_pieces'][0])  # proxima peça
                         print("Height")
                         print(calculate_total_height(state, x, y))
+                        print("Total Height")
+                        print(total_height(state))
                         print("Holes")
                         print(calculate_holes(state, x, y))
                         print("Bumpiness")
