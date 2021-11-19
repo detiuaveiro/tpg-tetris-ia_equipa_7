@@ -50,9 +50,8 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                     x = (state['dimensions'][0])
                     y = (state['dimensions'][1])
                 else:
-                    # print(state['game'])
                     if state['piece'] is None:
-                        # print(state['piece'])
+                       #print(state['game'])
                         print("New Piece")
                         print(state['next_pieces'][0])  # proxima peça
                         print("Height")
@@ -61,6 +60,14 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                         print(calculate_holes(state, x, y))
                         print("Bumpiness")
                         print(calculate_bumpiness(state, x, y))
+                        print("Free Spots")
+                        print(calculate_free_spots(state, x, y))
+                        print("Crust")
+                        print(calculate_crust(state, x, y))
+                        print("Spots")
+                        print(calculate_possible_spots(state, x, y))
+
+
                     if exist_key == False:
                         keys = next_key(state)  # para agent2.py
                         # keys = next_key(state)  para agent.py
