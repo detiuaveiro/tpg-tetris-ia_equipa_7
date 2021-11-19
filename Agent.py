@@ -195,7 +195,7 @@ def heuristic(state):  # falta completar e fazer outras funçoes   def heuristic
     c = -0.35663
     d = -0.184483
 
-    for i in pos:  # pos é a lista de movimentos possiveis  (falta funçao)
+    for i in pos:  # pos é a lista de movimentos possiveis/coordenadas finais possiveis  (falta funçao)
 
         aggr = calculate_total_height(state)
         #comp    , falta funçao pra calcular complete lines
