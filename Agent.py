@@ -31,7 +31,7 @@ def melhor_sitio(state):
     if peca1 == "quadrado":
         keys = ["a", "a"]
     elif peca1 == "L":
-        keys = ["d", "d", "d"]
+        keys = ["w", "w", "w"]
     elif peca1 == "J":
         keys = []
     elif peca1 == "T":
@@ -55,7 +55,7 @@ def peca(state):
     elif state['piece'] == [[4, 2], [4, 3], [4, 4], [5, 4]]:  # L
 
         return "L"
-    elif state['piece'] == [[4, 2], [5, 2], [4, 3], [4, 4]]:
+    elif state['piece'] == [[4, 2], [5, 2], [4, 3], [4, 4]]:  #J
 
         return "J"
     elif state['piece'] == [[4, 2], [4, 3], [5, 3], [4, 4]]:  # T
@@ -69,6 +69,15 @@ def peca(state):
         return "S"
     elif state['piece'] == [[4, 2], [3, 3], [4, 3], [3, 4]]:  # Z
         return "Z"
+
+def possible_moves(state):   # talvez fazer assim??? depois passar a lista de movimentos possiveis de cada peça para outra funçao, que vai calcular as coordenadas finais para cada movimento dependendo 
+    moves = []               # das posiçoes já existentes no game, e usar função da heuristica pra determinar qual o melhor movimento?
+    current_piece = peca(state)
+    if current_piece == "quadrado":
+        moves = [[""], ["a"], ["a","a"], ["d"], ["d", "d"], ["d", "d", "d"], ["d", "d", "d", "d"]]
+    elif current_piece == "L":
+        moves = [[""], ["a"], ["a","a"], ["a","a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"], ["w", "w"], ["w","w","a"], ["w","w","a","a"], ["w","w","d"], ["w","w","d", "d"], ["w","w","d", "d", "d"], ["w","w","d", "d", "d", "d"], ["w", "w", "w"], ["w","w","w","a"], ["w","w","w","a","a"], ["w","w","w","d"], ["w","w","w","d", "d"], ["w","w","w","d", "d", "d"]]
+        
 
 
 def calculate_total_height(state, x=10, y=30):
