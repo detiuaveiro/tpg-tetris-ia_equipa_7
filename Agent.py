@@ -33,15 +33,15 @@ def melhor_sitio(state):
     elif peca1 == "L":
         keys = ["w", "w", "w"]
     elif peca1 == "J":
-        keys = []
+        keys = ["w", "w", "w"]
     elif peca1 == "T":
-        keys = ["d", "d"]
+        keys = ["w", "w", "w"]
     elif peca1 == "I":
-        keys = ["d"]
+        keys = ["w"]
     elif peca1 == "S":
-        keys = ["a"]
+        keys = ["w"]
     elif peca1 == "Z":
-        keys = ["a", "a", "a", "a"]
+        keys = ["w"]
     else:
         keys=[]
     return keys
@@ -77,7 +77,84 @@ def possible_moves(state):   # talvez fazer assim??? depois passar a lista de mo
         moves = [[""], ["a"], ["a","a"], ["d"], ["d", "d"], ["d", "d", "d"], ["d", "d", "d", "d"]]
     elif current_piece == "L":
         moves = [[""], ["a"], ["a","a"], ["a","a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"], ["w", "w"], ["w","w","a"], ["w","w","a","a"], ["w","w","d"], ["w","w","d", "d"], ["w","w","d", "d", "d"], ["w","w","d", "d", "d", "d"], ["w", "w", "w"], ["w","w","w","a"], ["w","w","w","a","a"], ["w","w","w","d"], ["w","w","w","d", "d"], ["w","w","w","d", "d", "d"]]
+    elif current_piece == "J":
+        moves = [[""], ["a"], ["a","a"], ["a","a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"], ["w", "w"], ["w","w","a"], ["w","w","a","a"], ["w","w","d"], ["w","w","d", "d"], ["w","w","d", "d", "d"], ["w","w","d", "d", "d", "d"], ["w", "w", "w"], ["w","w","w","a"], ["w","w","w","a","a"], ["w","w","w","d"], ["w","w","w","d", "d"], ["w","w","w","d", "d", "d"]]
+    elif current_piece == "T":
+        moves = [[""], ["a"], ["a","a"], ["a","a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"], ["w", "w"], ["w","w","a"], ["w","w","a","a"], ["w","w","d"], ["w","w","d", "d"], ["w","w","d", "d", "d"], ["w","w","d", "d", "d", "d"], ["w", "w", "w"], ["w","w","w","a"], ["w","w","w","a","a"], ["w","w","w","d"], ["w","w","w","d", "d"], ["w","w","w","d", "d", "d"]]
+    elif current_piece == "I":
+        moves = [[""], ["a"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","a","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"], ["w","d", "d", "d", "d"]]
+    elif current_piece == "S":
+        moves = [[""], ["a"], ["a", "a"], ["a", "a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"]]
+    elif current_piece == "Z":
+        moves = [[""], ["a"], ["a", "a"], ["d"], ["d", "d"], ["d", "d", "d"], ["d", "d", "d", "d"], ["w"], ["w","a"], ["w","a","a"], ["w","d"], ["w","d", "d"], ["w","d", "d", "d"]]
+    return moves
+
+def possible_positions(state):
+    current_piece = peca(state)
+    if current_piece == "quadrado":
+        moves = possible_moves(state)
+        i=0
+        while i<len(moves):
+            move = moves[i]
+            estado_final = final_state(state,move)   
+                                                      #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para 
+            #falta codigo                             # cada state game diferente e ver qual o melhor move a fazer
+
+def final_state(state,move):
+    current_piece = peca(state)
+    if current_piece == "quadrado":
+        initial_state = [[3, 3], [4, 3], [3, 4], [4, 4]]
+        final_state = initial_state
+        i=0
+        while i<len(move):
+            if move[i] == "a":
+                j=0
+                while j<len(initial_state):           # para cada coordenada
+                    aux = final_state[j]
+                    aux[0] = aux[0] - 1               # x vai 1 vez para a esquerda
+                    final_state[j] = [aux[0], final_state[j][1]]
+                    j += 1
+            elif move[i] == "d":
+                j=0
+                while j<len(initial_state):
+                    aux = final_state[j]
+                    aux[0] = aux[0] + 1               # x vai 1 vez para a direita
+                    final_state[j] = [aux[0], final_state[j][1]]
+                    j += 1
+            i += 1
         
+        crosta = calculate_crust(state)
+        x0 = final_state[0][0]
+        x1 = final_state[1][0]
+        x2 = final_state[2][0]
+        x3 = final_state[3][0]
+
+        crosta0 = crosta[x0]
+        crosta1 = crosta[x1]
+        crosta2 = crosta[x2]
+        crosta3 = crosta[x3]
+        
+        crosta_list = [crosta0] + [crosta1] + [crosta2] + [crosta3]
+        i = 0
+        minimo = 30
+        while i < len(crosta_list):
+            if crosta_list[i] < minimo:
+                minimo = crosta_list[i]
+        
+        j = 0
+        while j < len(final_state):
+            aux = final_state[j]
+            aux[1] = minimo - 1
+            final_state[i] = [final_state[i][0], aux[1]]     
+        
+    # elif   # falta fazer para restantes peças  (as restantes também têm o move[i] = "w")
+                    
+
+
+
+
+
+
 
 
 def calculate_total_height(state, x=10, y=30):
@@ -198,7 +275,7 @@ def heuristic(state):  # falta completar e fazer outras funçoes   def heuristic
     for i in pos:  # pos é a lista de movimentos possiveis/coordenadas finais possiveis  (falta funçao)
 
         aggr = calculate_total_height(state)
-        #comp    , falta funçao pra calcular complete lines
+        #comp    , falta funçao pra calcular completed lines
         hole = calculate_holes(state)
         bump = calculate_bumpiness (state)
         best_pos = (a*aggr) + (c*hole) + (d*bump) # + (b*comp)
