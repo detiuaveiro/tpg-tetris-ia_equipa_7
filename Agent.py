@@ -296,19 +296,27 @@ def calculate_completed_lines(state,piece,x=10,y=30):
     for coordinate in piece:
         game_state.append(coordinate)
     #height
-    column_heights_min = [y] * x
-    for coordinate in game_state:
-        if coordinate[1] < column_heights_min[coordinate[0]]:
-            column_heights_min[coordinate[0]] = coordinate[1]
-    column_heights_min = column_heights_min[1:]
-    column_heights_min = column_heights_min[:-1]
-    for value in range(0, x-2):
-        column_heights_min[value] = y - column_heights_min[value]
-    print(column_heights_min)
+    #column_heights_min = [y] * x
+    #for coordinate in game_state:
+    #    if coordinate[1] < column_heights_min[coordinate[0]]:
+    #        column_heights_min[coordinate[0]] = coordinate[1]
+    #column_heights_min = column_heights_min[1:]
+    #column_heights_min = column_heights_min[:-1]
+    #for value in range(0, x-2):
+    #    column_heights_min[value] = y - column_heights_min[value]
+    #print(column_heights_min)
     #Number of lines Done
-    lines=min(column_heights_min)
-    return lines
-
+    #lines=min(column_heights_min)
+    #return lines
+    columns=[0]*(y)
+    line=0
+    for coordinate in game_state:
+        columns[coordinate[1]-1]+=1
+    columns = columns[:-1]
+    for value in columns:
+        if value==x-2:
+            line+=1
+    return line
 def total_height(state):
     array_heights = calculate_total_height(state)
     total = 0
