@@ -164,6 +164,7 @@ def calculate_total_height(state, x=10, y=30):
             column_heights_min[coordinate[0]]=coordinate[1]
     for value in range(0,x):
         column_heights_min[value] =y - column_heights_min[value]
+
     return column_heights_min
 
 
@@ -199,7 +200,7 @@ def calculate_free_spots(state, x=10, y=30):
     y_max = y - max(calculate_total_height(state, x, y))-1
     count = []
     for j in range(y_max, y):
-        for i in range(1, 9):    # tirei indices das bordas
+        for i in range(1, x-1):    # tirei indices das bordas
             coordinate = [i, j]
             if coordinate not in state['game']:
                 count.append(coordinate)
@@ -238,8 +239,14 @@ def piece_equation(state,x,y):
 
     elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [2, 3]]:  #T
         return [[x,y-2],[x,y-1],[x+1,y-1],[x,y]]
-
     return equation
+
+def piece_position(equation,x,y):
+    postion_result=list(map(lambda item: item.replace("x", x), equation))
+    postion_result=list(map(lambda item: item.replace("y",y), equation))
+    return postion_result
+
+
 
 def calculate_possible_spots(state, x=10, y=30):
     free_spots = calculate_free_spots(state, x=10, y=30)
@@ -247,13 +254,34 @@ def calculate_possible_spots(state, x=10, y=30):
     possible_spots = []
     for i in range(0,len(crust)):
         new_piece=piece_equation(state, i, crust[i])
+
         Test=True
         for coordinate in new_piece:
-            if coordinate in state["game"] or coordinate[1] > crust[i] or coordinate[0] <= 0 or coordinate[0]>x-1 :
+            if coordinate in state["game"] or coordinate[1] > crust[i] or coordinate[1]<0 or coordinate[0] <= 0 or coordinate[0]>x-1 :
                 Test=False
         if Test:
             possible_spots.append(new_piece)
     return possible_spots
+
+
+def calculate_completed_lines(state,piece,x=10,y=30):
+    game_state=state["game"]
+
+    for coordinate in piece:
+        game_state.append(coordinate)
+    #height
+    column_heights_min = [y] * x
+    for coordinate in game_state:
+        if coordinate[1] < column_heights_min[coordinate[0]]:
+            column_heights_min[coordinate[0]] = coordinate[1]
+    column_heights_min = column_heights_min[1:]
+    column_heights_min = column_heights_min[:-1]
+    for value in range(0, x-2):
+        column_heights_min[value] = y - column_heights_min[value]
+    print(column_heights_min)
+    #Number of lines Done
+    lines=min(column_heights_min)
+    return lines
 
 def total_height(state):
     array_heights = calculate_total_height(state)

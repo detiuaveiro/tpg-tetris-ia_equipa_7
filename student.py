@@ -53,8 +53,10 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                         print(calculate_crust(state, x, y))
                         print("Spots")
                         print(calculate_possible_spots(state, x, y))
-
-
+                        spots=calculate_possible_spots(state, x, y)
+                        print("Game With new piece")
+                        print(calculate_completed_lines(state,spots[0]))
+                        print("____")
                     if exist_key == False:
                         keys = next_key(state)  # para agent2.py
                         # keys = next_key(state)  para agent.py
