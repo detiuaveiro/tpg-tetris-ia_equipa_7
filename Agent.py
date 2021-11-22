@@ -46,8 +46,8 @@ def melhor_sitio(state):
         keys=[]
     return keys
 
-    
-         
+
+
 def peca(state):
 
     if state['piece'] == [[3, 3], [4, 3], [3, 4], [4, 4]]:  # quadrado
@@ -70,7 +70,7 @@ def peca(state):
     elif state['piece'] == [[4, 2], [3, 3], [4, 3], [3, 4]]:  # Z
         return "Z"
 
-def possible_moves(state):   # talvez fazer assim??? depois passar a lista de movimentos possiveis de cada peça para outra funçao, que vai calcular as coordenadas finais para cada movimento dependendo 
+def possible_moves(state):   # talvez fazer assim??? depois passar a lista de movimentos possiveis de cada peça para outra funçao, que vai calcular as coordenadas finais para cada movimento dependendo
     moves = []               # das posiçoes já existentes no game, e usar função da heuristica pra determinar qual o melhor movimento?
     current_piece = peca(state)
     if current_piece == "quadrado":
@@ -96,8 +96,8 @@ def possible_positions(state):
         i=0
         while i<len(moves):
             move = moves[i]
-            estado_final = final_state(state,move)   
-                                                      #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para 
+            estado_final = final_state(state,move)
+                                                      #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
             #falta codigo                             # cada state game diferente e ver qual o melhor move a fazer
 
 def final_state(state,move):
@@ -122,7 +122,7 @@ def final_state(state,move):
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
             i += 1
-        
+
         crosta = calculate_crust(state)
         x0 = final_state[0][0]
         x1 = final_state[1][0]
@@ -133,22 +133,22 @@ def final_state(state,move):
         crosta1 = crosta[x1]
         crosta2 = crosta[x2]
         crosta3 = crosta[x3]
-        
+
         crosta_list = [crosta0] + [crosta1] + [crosta2] + [crosta3]
         i = 0
         minimo = 30
         while i < len(crosta_list):
             if crosta_list[i] < minimo:
                 minimo = crosta_list[i]
-        
+
         j = 0
         while j < len(final_state):
             aux = final_state[j]
             aux[1] = minimo - 1
-            final_state[i] = [final_state[i][0], aux[1]]     
-        
+            final_state[i] = [final_state[i][0], aux[1]]
+
     # elif   # falta fazer para restantes peças  (as restantes também têm o move[i] = "w")
-                    
+
 
 
 
@@ -217,34 +217,52 @@ def calculate_crust(state, x=10, y=30):
     crust = crust[:-1]  # remover bordas
     return crust
 
-def piece_equation(state,x,y):
+def piece_equation(piece,x,y):
     equation=[]
-    if state['next_pieces'][0] == [[1, 2], [2, 2], [1, 3], [2, 3]]:     #Q
+    #if state['next_pieces'][0] == [[1, 2], [2, 2], [1, 3], [2, 3]]:     #Q
+    if piece == "Q":
         return [[x-1,y-1],[x,y-1],[x-1,y],[x,y]]
 
-    elif state['next_pieces'][0]  == [[0, 1], [1, 1], [2, 1], [3, 1]]:  #I
+    #elif state['next_pieces'][0]  == [[0, 1], [1, 1], [2, 1], [3, 1]]:  #I
+    elif piece == "I":
         return [[x,y],[x+1,y],[x+2,y],[x+3,y]]
 
-    elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [3, 3]]:  #S
+    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [3, 3]]:  #S
+    elif piece == "S":
         return [[x-1,y-2],[x-1,y-1],[x,y-1],[x,y+-1]]
 
-    elif state['next_pieces'][0]  == [[2, 1], [1, 2], [2, 2], [1, 3]]:  #Z
+    #elif state['next_pieces'][0]  == [[2, 1], [1, 2], [2, 2], [1, 3]]:  #Z
+    elif piece == "Z":
         return [[x+1,y-2],[x,y-1],[x+1,y-1],[x,y]]
 
-    elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   #L
+    #elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   #L
+    elif piece == "L":
         return [[x-1,y-2],[x-1,y-1],[x-1,y],[x,y]]
 
-    elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   #J
+    #elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   #J
+    elif piece == "J":
         return [[x,y-2],[x+1,y-2],[x,y-1],[x,y]]
 
-    elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [2, 3]]:  #T
+    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [2, 3]]:  #T
+    elif piece== "T":
         return [[x,y-2],[x,y-1],[x+1,y-1],[x,y]]
     return equation
 
-def piece_position(equation,x,y):
-    postion_result=list(map(lambda item: item.replace("x", x), equation))
-    postion_result=list(map(lambda item: item.replace("y",y), equation))
-    return postion_result
+def nextpiece_type(state):
+    if  state['next_pieces'][0]  == [[1, 2], [2, 2], [1, 3], [2, 3]]:   # Q
+        return "Q"
+    elif state['next_pieces'][0] == [[0, 1], [1, 1], [2, 1], [3, 1]]:   # I
+        return "I"
+    elif state['next_pieces'][0] == [[2, 1], [2, 2], [3, 2], [3, 3]]:   # S
+        return "S"
+    elif state['next_pieces'][0] == [[2, 1], [1, 2], [2, 2], [1, 3]]:   # Z
+        return "Z"
+    elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   # L
+        return "L"
+    elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   # J
+        return "J"
+    elif state['next_pieces'][0] == [[2, 1], [2, 2], [3, 2], [2, 3]]:   # T
+        return "T"
 
 
 
@@ -252,12 +270,12 @@ def calculate_possible_spots(state, x=10, y=30):
     free_spots = calculate_free_spots(state, x=10, y=30)
     crust = calculate_crust(state, x=10, y=30)
     possible_spots = []
+    next_piece = nextpiece_type(state)
     for i in range(0,len(crust)):
-        new_piece=piece_equation(state, i, crust[i])
-
+        new_piece=piece_equation(next_piece, i, crust[i])
         Test=True
         for coordinate in new_piece:
-            if coordinate in state["game"] or coordinate[1] > crust[i] or coordinate[1]<0 or coordinate[0] <= 0 or coordinate[0]>x-1 :
+            if coordinate in state["game"] or coordinate[1] > crust[i] or coordinate[1]<0 or coordinate[0] <= 0 or coordinate[0]>=x-1 :
                 Test=False
         if Test:
             possible_spots.append(new_piece)
@@ -266,7 +284,6 @@ def calculate_possible_spots(state, x=10, y=30):
 
 def calculate_completed_lines(state,piece,x=10,y=30):
     game_state=state["game"]
-
     for coordinate in piece:
         game_state.append(coordinate)
     #height
