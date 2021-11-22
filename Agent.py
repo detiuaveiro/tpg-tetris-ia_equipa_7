@@ -3,16 +3,12 @@ import common
 
 
 def next_key(state):
-    pecas_sup = []
-    pecas_sup.append(state['game'])
     # print(pecas_sup)
     current_piece = peca(state)
     next_piece = prox_peca(state)
 
-
-    superf_ocup = pecas_sup.pop(0)
-
-    keys = melhor_sitio(state)
+    keys = possible_positions(state).copy()
+    # keys = melhor_sitio(state)
     return keys
 
 
@@ -92,13 +88,23 @@ def possible_moves(state):   # talvez fazer assim??? depois passar a lista de mo
 def possible_positions(state):
     current_piece = peca(state)
     if current_piece == "quadrado":
-        moves = possible_moves(state)
+        moves = possible_moves(state).copy()
         i=0
-        while i<len(moves):
-            move = moves[i]
-            estado_final = final_state(state,move)
-                                                      #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
-            #falta codigo                             # cada state game diferente e ver qual o melhor move a fazer
+        heuristic_list = []
+        while i<len(moves): 
+            lista_game = state['game'].copy()           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
+            move = moves[i].copy()                      # cada state game diferente e ver qual o melhor move a fazer
+            estado_final = final_state(state,move)      #falta codigo 
+            lista_game.append(estado_final) 
+            h = heuristic(lista_game)
+            heuristic_list.append(h)
+            i += 1
+        max_value = max(heuristic_list)
+        max_value_index = heuristic_list.index(max_value) 
+        best_move = moves[max_value_index].copy()
+        return best_move                                   
+                                        
+
 
 def final_state(state,move):
     current_piece = peca(state)
@@ -126,26 +132,29 @@ def final_state(state,move):
         crosta = calculate_crust(state)
         x0 = final_state[0][0]
         x1 = final_state[1][0]
-        x2 = final_state[2][0]
-        x3 = final_state[3][0]
 
         crosta0 = crosta[x0]
         crosta1 = crosta[x1]
-        crosta2 = crosta[x2]
-        crosta3 = crosta[x3]
 
-        crosta_list = [crosta0] + [crosta1] + [crosta2] + [crosta3]
+        crosta_list = [crosta0] + [crosta1]
         i = 0
         minimo = 30
         while i < len(crosta_list):
             if crosta_list[i] < minimo:
                 minimo = crosta_list[i]
 
-        j = 0
-        while j < len(final_state):
-            aux = final_state[j]
-            aux[1] = minimo - 1
-            final_state[i] = [final_state[i][0], aux[1]]
+        # j = 0
+        # while j < len(final_state):
+        #     aux = final_state[j]
+        #     aux[1] = minimo - 1
+        #     final_state[j] = [final_state[j][0], aux[1]]
+
+        final_state[0] = [final_state[0][0], minimo - 2]
+        final_state[1] = [final_state[1][0], minimo - 2]
+        final_state[2] = [final_state[2][0], minimo - 1]
+        final_state[3] = [final_state[3][0], minimo - 1]
+        print(final_state)
+        return final_state
 
     # elif   # falta fazer para restantes peças  (as restantes também têm o move[i] = "w")
 
@@ -309,7 +318,7 @@ def total_height(state):
 
 
 
-def heuristic(state):  # falta completar e fazer outras funçoes   def heuristic(state)
+def heuristic(lista):  # falta completar e fazer outras funçoes   def heuristic(state)
     lista_aggr = []
 
     a = -0.510066
@@ -317,17 +326,17 @@ def heuristic(state):  # falta completar e fazer outras funçoes   def heuristic
     c = -0.35663
     d = -0.184483
 
-    for i in pos:  # pos é a lista de movimentos possiveis/coordenadas finais possiveis  (falta funçao)
+    # for i in pos:  # pos é a lista de movimentos possiveis/coordenadas finais possiveis  (falta funçao)
 
-        aggr = calculate_total_height(state)
+    aggr = total_height(lista)
         #comp    , falta funçao pra calcular completed lines
-        hole = calculate_holes(state)
-        bump = calculate_bumpiness (state)
-        best_pos = (a*aggr) + (c*hole) + (d*bump) # + (b*comp)
-        lista_aggr.append(best_pos)
+    hole = calculate_holes(lista)
+    bump = calculate_bumpiness (lista)
+    best_pos = (a*aggr) + (c*hole) + (d*bump) # + (b*comp)
+    #     lista_aggr.append(best_pos)
 
-    max_valor = max(lista_aggr)
-    index_max_valor = lista_aggr.index(max_valor)
-    best_pos = pos[max_value_index]
+    # max_valor = max(lista_aggr)
+    # index_max_valor = lista_aggr.index(max_valor)
+    # best_pos = pos[max_value_index]
 
     return best_pos
