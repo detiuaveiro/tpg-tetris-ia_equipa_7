@@ -57,7 +57,7 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                     #     print("Game With new piece")
                     #     print(calculate_completed_lines(state,spots[0]))
                     #     print("____")
-                    print(state['piece'])
+                    # print(state['piece'])
                     # lista_game = state['game']
                     # print(lista_game)
                     if exist_key == False:
