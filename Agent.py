@@ -274,9 +274,9 @@ def calculate_holes(state, x=10, y=30):
     #     num_holes += y - (count[value]+max_height[value])
     #     print(count[value],max_height[value])
     height = calculate_total_height(state)
-    for i in range(height):
+    for i in range(len(height)):
         for j in range((y-1),height[i]):
-            coordinate = [i,j]
+            coordinate = (i,j)
             if coordinate not in state:
                 num_holes+=1
     return num_holes
