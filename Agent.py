@@ -6,8 +6,10 @@ def next_key(state):
     # print(pecas_sup)
     current_piece = peca(state)
     next_piece = prox_peca(state)
-
-    keys = possible_positions(state).copy()
+    if peca(state) == "quadrado":
+        keys = possible_positions(state)#.copy()
+    else:
+        keys = melhor_sitio(state)
     # keys = melhor_sitio(state)
     return keys
 
@@ -88,25 +90,25 @@ def possible_moves(state):   # talvez fazer assim??? depois passar a lista de mo
 def possible_positions(state):
     current_piece = peca(state)
     if current_piece == "quadrado":
-        moves = possible_moves(state).copy()
+        moves = possible_moves(state)#.copy()
         i=0
         heuristic_list = []
         while i<len(moves): 
-            lista_game = state['game'].copy()           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
-            move = moves[i].copy()                      # cada state game diferente e ver qual o melhor move a fazer
-            estado_final = final_state(state,move)      #falta codigo 
+            lista_game = state['game']#.copy()           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
+            move = moves[i]#.copy()                      # cada state game diferente e ver qual o melhor move a fazer
+            estado_final = final_state_piece(state,move)      #falta codigo 
             lista_game.append(estado_final) 
             h = heuristic(lista_game)
             heuristic_list.append(h)
             i += 1
         max_value = max(heuristic_list)
         max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index].copy()
+        best_move = moves[max_value_index]#.copy()
         return best_move                                   
                                         
 
 
-def final_state(state,move):
+def final_state_piece(state,move):
     current_piece = peca(state)
     if current_piece == "quadrado":
         initial_state = [[3, 3], [4, 3], [3, 4], [4, 4]]
@@ -156,23 +158,97 @@ def final_state(state,move):
         print(final_state)
         return final_state
 
+    elif current_piece == "I":
+        initial_state =  [[2, 2], [3, 2], [4, 2], [5, 2]]
+        final_state = initial_state
+        i=0
+        houve_w = False
+        while i<len(move):
+            if move[i] == "w":
+                aux0 = final_state[0]
+                aux1 = final_state[1]
+                aux2 = final_state[2]
+                aux3 = final_state[3]
+
+                aux0 = [aux0[0]+2, aux0[1]]                     #[[4, 2], [4, 3], [4, 4], [4, 5]], depois de um w
+                aux1 = [aux1[0]+1, aux0[1]+1]
+                aux2 = [aux2[0], aux2[1]+2]
+                aux3 = [aux3[0]-1,aux3[1]+3]
+
+                final_state[0] = aux0
+                final_state[1] = aux1
+                final_state[2] = aux2
+                final_state[3] = aux3
+
+                houve_w = True
+            
+            elif move[i] == "a":
+                j=0
+                while j<len(initial_state):           # para cada coordenada
+                    aux = final_state[j]
+                    aux[0] = aux[0] - 1               # x vai 1 vez para a esquerda
+                    final_state[j] = [aux[0], final_state[j][1]]
+                    j += 1
+            elif move[i] == "d":
+                j=0
+                while j<len(initial_state):
+                    aux = final_state[j]
+                    aux[0] = aux[0] + 1               # x vai 1 vez para a direita
+                    final_state[j] = [aux[0], final_state[j][1]]
+                    j += 1
+            i += 1
+
+            if houve_w == False:
+                crosta = calculate_crust(state)
+                x0 = final_state[0][0]
+                x1 = final_state[1][0]
+                x2 = final_state[2][0]
+                x3 = final_state[3][0]
+
+                crosta0 = crosta[x0]
+                crosta1 = crosta[x1]
+                crosta2 = crosta[x2]
+                crosta3 = crosta[x3]
+
+                crost_temp = [crosta0] + [crosta1] + [crosta2] + [crosta3]
+
+                i = 0
+                minimo = 30
+                while i < len(crosta_list):
+                    if crosta_list[i] < minimo:
+                        minimo = crosta_list[i]
+
+                j = 0
+                while j < len(final_state):
+                    aux = final_state[j]
+                    aux[1] = minimo - 1
+                    final_state[j] = [final_state[j][0], aux[1]]
+            else:
+                crosta = calculate_crust(state)
+
+                x0 = final_state[0][0]
+                crosta0 = crosta[x0]
+                final_state[0] = [final_state[0][0], crosta0 - 4]
+                final_state[1] = [final_state[1][0], crosta0 - 3]
+                final_state[2] = [final_state[2][0], crosta0 - 2]
+                final_state[3] = [final_state[3][0], crosta0 - 1]
+
+                return final_state
+
+
+
+
+
+
     # elif   # falta fazer para restantes peças  (as restantes também têm o move[i] = "w")
-
-
-
-
-
-
-
-
 
 def calculate_total_height(state, x=10, y=30):
     column_heights_min= [y] * x
-    for coordinate in state['game']:
+    for coordinate in state: #mudei
         if coordinate[1] < column_heights_min[coordinate[0]]:
             column_heights_min[coordinate[0]]=coordinate[1]
     for value in range(0,x):
-        column_heights_min[value] =y - column_heights_min[value]
+        column_heights_min[value] = y - column_heights_min[value]
 
     return column_heights_min
 
@@ -181,7 +257,7 @@ def calculate_holes(state, x=10, y=30):
     count = [0] * x
     max_height = [y] * x
     num_holes = 0
-    for coordinate in state['game']:
+    for coordinate in state: #mudei
 
         if max_height[coordinate[0]] > coordinate[1]:
             count[coordinate[0]] += 1
