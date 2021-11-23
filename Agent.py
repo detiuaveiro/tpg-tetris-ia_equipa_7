@@ -266,13 +266,19 @@ def calculate_holes(state, x=10, y=30):
     count = [0] * x
     max_height = [y] * x
     num_holes = 0
-    for coordinate in state: #mudei
-        count[coordinate[0]]+=1
-        if coordinate[1] < max_height[coordinate[0]]:
-            max_height[coordinate[0]] = coordinate[1]
-    for value in range(0,x):
-        num_holes += y - (count[value]+max_height[value])
-        print(count[value],max_height[value])
+    # for coordinate in state: #mudei
+    #     count[coordinate[0]]+=1
+    #     if coordinate[1] < max_height[coordinate[0]]:
+    #         max_height[coordinate[0]] = coordinate[1]
+    # for value in range(0,x):
+    #     num_holes += y - (count[value]+max_height[value])
+    #     print(count[value],max_height[value])
+    height = calculate_total_height(state)
+    for i in range(height):
+        for j in range((y-1),height[i]):
+            coordinate = [i,j]
+            if coordinate not in state:
+                num_holes+=1
     return num_holes
 
 
