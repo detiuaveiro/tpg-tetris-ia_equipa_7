@@ -35,31 +35,29 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                     x = (state['dimensions'][0])
                     y = (state['dimensions'][1])
                 else:
-                    # if state['piece'] is None:
-                    #    #print(state['game'])
-                    #     print("New Piece")
-                    #     print(state['next_pieces'][0])  # proxima peça
-                    #     print("Height")
-                    #     print(calculate_total_height(state, x, y))
-                    #     print("Total Height")
-                    #     print(total_height(state))
-                    #     print("Holes")
-                    #     print(calculate_holes(state, x, y))
-                    #     print("Bumpiness")
-                    #     print(calculate_bumpiness(state, x, y))
-                    #     print("Free Spots")
-                    #     print(calculate_free_spots(state, x, y))
-                    #     print("Crust")
-                    #     print(calculate_crust(state, x, y))
-                    #     print("Spots")
-                    #     print(calculate_possible_spots(state, x, y))
-                    #     spots=calculate_possible_spots(state, x, y)
-                    #     print("Game With new piece")
-                    #     print(calculate_completed_lines(state,spots[0]))
-                    #     print("____")
-                    # print(state['piece'])
-                    # lista_game = state['game']
-                    # print(lista_game)
+                    if state['piece'] is None:
+                          print(state['game'])
+                          print("New Piece")
+                          print(state['next_pieces'][0])  # proxima peça
+                          print("Height")
+                          print(calculate_total_height(state["game"], x, y))
+                          print("Total Height")
+                          print(total_height(state["game"]))
+                          print("Holes")
+                          print(calculate_holes(state["game"], x, y))
+                          print("Bumpiness")
+                          print(calculate_bumpiness(state["game"], x, y))
+                          print("Free Spots")
+                          print(calculate_free_spots(state["game"], x, y))
+                          print("Crust")
+                          print(calculate_crust(state["game"], x, y))
+                          print("Spots")
+                          print(calculate_possible_spots(state, x, y))
+                          #spots=calculate_possible_spots(state, x, y)
+                          #print("Game With new piece")
+                          #print(calculate_completed_lines(state,spots[0]))
+                          print("____")
+
                     if exist_key == False:
                         keys = next_key(state)  # para agent2.py
                         # keys = next_key(state)  para agent.py

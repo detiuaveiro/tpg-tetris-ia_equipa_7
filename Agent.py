@@ -1,9 +1,9 @@
-from shape import Shape
+from shape import *
+from game import *
 import common
 
 
 def next_key(state):
-    # print(pecas_sup)
     current_piece = peca(state)
     next_piece = prox_peca(state)
     if peca(state) == "quadrado":
@@ -11,7 +11,6 @@ def next_key(state):
     else:
         keys = melhor_sitio(state)
     # keys = melhor_sitio(state)
-    # print(keys)
     return keys
 
 
@@ -91,37 +90,29 @@ def possible_moves(state):   # talvez fazer assim??? depois passar a lista de mo
 def possible_positions(state):
     current_piece = peca(state)
     if current_piece == "quadrado":
-        moves = possible_moves(state)#.copy()
-        print(moves)
+        moves = possible_moves(state)
         i=0
         heuristic_list = []
         while i<len(moves): 
-            # print(i)
-            # print(len(moves))
-            lista_game = state['game']#.copy()           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para
-            # print(lista_game)
-            move = moves[i]#.copy()                      # cada state game diferente e ver qual o melhor move a fazer
-            print(move)
+
+            lista_game = state['game']
+            move = moves[i]
             estado_final = final_state_piece(state,move)
-            print(estado_final)      #falta codigo 
             for coord in estado_final:
-                lista_game.append(coord) 
-            # print(lista_game)
+                lista_game.append(coord)
             h = heuristic(lista_game)
-            # print(h)
+
             state['game'] = lista_game[:-4]
-            # print("----------")
-            # print(state['game'])
             heuristic_list.append(h)
-            # print(heuristic_list)
+
             i += 1
-        # print(heuristic_list)
+
         max_value = max(heuristic_list)
-        # print(max_value)
+
         max_value_index = heuristic_list.index(max_value) 
-        # print(max_value_index)
+
         best_move = moves[max_value_index]#.copy()
-        # print(best_move)
+
         return best_move                                   
                                         
 
@@ -129,12 +120,10 @@ def possible_positions(state):
 def final_state_piece(state,move):
     current_piece = peca(state)
     if current_piece == "quadrado":
-        print(current_piece)
         initial_state = [[3, 3], [4, 3], [3, 4], [4, 4]]
         final_state = initial_state
         i=0
         while i<len(move):
-            print(len(move))
             if move[i] == "a":
                 j=0
                 while j<len(initial_state):           # para cada coordenada
@@ -150,27 +139,20 @@ def final_state_piece(state,move):
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
             i += 1
-
         crosta = calculate_crust(state["game"])
-        print(crosta)
         x0 = final_state[0][0]
         x1 = final_state[1][0]
 
         crosta0 = crosta[x0-1]
         crosta1 = crosta[x1-1]
-        print(crosta0)
-        print(crosta1)
 
         crosta_list = [crosta0] + [crosta1]
-        print(crosta_list)
         minimo = min(crosta_list)
-        print(minimo)
         # i = 0
         # minimo = 30
         # while i < len(crosta_list):
         #     if crosta_list[i] < minimo:
         #         minimo = crosta_list[i]
-        # print(minimo)
 
         # j = 0
         # while j < len(final_state):
@@ -182,7 +164,7 @@ def final_state_piece(state,move):
         final_state[1] = [final_state[1][0], minimo]
         final_state[2] = [final_state[2][0], minimo - 1]
         final_state[3] = [final_state[3][0], minimo - 1]
-        # print(final_state)
+
         return final_state
 
     elif current_piece == "I":
@@ -285,14 +267,12 @@ def calculate_holes(state, x=10, y=30):
     max_height = [y] * x
     num_holes = 0
     for coordinate in state: #mudei
-
-        if max_height[coordinate[0]] > coordinate[1]:
-            count[coordinate[0]] += 1
+        count[coordinate[0]]+=1
+        if coordinate[1] < max_height[coordinate[0]]:
             max_height[coordinate[0]] = coordinate[1]
-
-    for column in range(len(count)):
-        if count[column] < y - 1 - max_height[column]:
-            num_holes += 1
+    for value in range(0,x):
+        num_holes += y - (count[value]+max_height[value])
+        print(count[value],max_height[value])
     return num_holes
 
 
@@ -314,7 +294,7 @@ def calculate_free_spots(state, x=10, y=30):
     for j in range(y_max, y):
         for i in range(1, x-1):    # tirei indices das bordas
             coordinate = [i, j]
-            if coordinate not in state['game']:
+            if coordinate not in state:
                 count.append(coordinate)
     count.sort()
     return count
@@ -329,69 +309,49 @@ def calculate_crust(state, x=10, y=30):
     crust = crust[:-1]  # remover bordas
     return crust
 
-def piece_equation(piece,x,y):
-    equation=[]
-    #if state['next_pieces'][0] == [[1, 2], [2, 2], [1, 3], [2, 3]]:     #Q
-    if piece == "Q":
-        return [[x-1,y-1],[x,y-1],[x-1,y],[x,y]]
 
-    #elif state['next_pieces'][0]  == [[0, 1], [1, 1], [2, 1], [3, 1]]:  #I
-    elif piece == "I":
-        return [[x,y],[x+1,y],[x+2,y],[x+3,y]]
-
-    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [3, 3]]:  #S
-    elif piece == "S":
-        return [[x-1,y-2],[x-1,y-1],[x,y-1],[x,y+-1]]
-
-    #elif state['next_pieces'][0]  == [[2, 1], [1, 2], [2, 2], [1, 3]]:  #Z
-    elif piece == "Z":
-        return [[x+1,y-2],[x,y-1],[x+1,y-1],[x,y]]
-
-    #elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   #L
-    elif piece == "L":
-        return [[x-1,y-2],[x-1,y-1],[x-1,y],[x,y]]
-
-    #elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   #J
-    elif piece == "J":
-        return [[x,y-2],[x+1,y-2],[x,y-1],[x,y]]
-
-    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [2, 3]]:  #T
-    elif piece== "T":
-        return [[x,y-2],[x,y-1],[x+1,y-1],[x,y]]
-    return equation
 
 def nextpiece_type(state):
+
     if  state['next_pieces'][0]  == [[1, 2], [2, 2], [1, 3], [2, 3]]:   # Q
-        return "Q"
+        return SHAPES[3]
     elif state['next_pieces'][0] == [[0, 1], [1, 1], [2, 1], [3, 1]]:   # I
-        return "I"
+        return SHAPES[2]
     elif state['next_pieces'][0] == [[2, 1], [2, 2], [3, 2], [3, 3]]:   # S
-        return "S"
+        return SHAPES[0]
     elif state['next_pieces'][0] == [[2, 1], [1, 2], [2, 2], [1, 3]]:   # Z
-        return "Z"
+        return SHAPES[1]
     elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   # L
-        return "L"
+        return SHAPES[6]
     elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   # J
-        return "J"
+        return SHAPES[4]
     elif state['next_pieces'][0] == [[2, 1], [2, 2], [3, 2], [2, 3]]:   # T
-        return "T"
+        return SHAPES[5]
 
 
 
 def calculate_possible_spots(state, x=10, y=30):
-    free_spots = calculate_free_spots(state, x=10, y=30)
-    crust = calculate_crust(state, x=10, y=30)
+
+    free_spots = calculate_free_spots(state["game"], x=10, y=30)
+    crust = calculate_crust(state["game"], x=10, y=30)
     possible_spots = []
     next_piece = nextpiece_type(state)
-    for i in range(0,len(crust)):
-        new_piece=piece_equation(next_piece, i, crust[i])
-        Test=True
-        for coordinate in new_piece:
-            if coordinate in state["game"] or coordinate[1] > crust[i] or coordinate[1]<0 or coordinate[0] <= 0 or coordinate[0]>=x-1 :
-                Test=False
-        if Test:
-            possible_spots.append(new_piece)
-    return possible_spots
+    print(next_piece)
+    # for i in range(0,len(free_spots)):
+    #     next_piece.set_pos(free_spots[i][0], free_spots[i][1])
+    #     print(next_piece)
+    #     print(free_spots[i][0], free_spots[i][1])
+    #     print()
+    #     next_piece = nextpiece_type(state)
+    #     Test = True
+    #     for coordinate in next_piece.positions:
+    #         if coordinate in state["game"] or coordinate[1] > crust[free_spots[i][0]-1] or coordinate[1] < 0 or coordinate[0] <= 0 or \
+    #                 coordinate[0] >= x - 1:
+    #             Test = False
+    #     if Test:
+    #         possible_spots.append((free_spots[i][0], free_spots[i][1]))
+    # return possible_spots
+    pass
 
 
 def calculate_completed_lines(state,piece=None,x=10,y=30):
@@ -400,20 +360,7 @@ def calculate_completed_lines(state,piece=None,x=10,y=30):
         for coordinate in piece:
             game_state.append(coordinate)
     else:
-        game_state=state        
-    #height
-    #column_heights_min = [y] * x
-    #for coordinate in game_state:
-    #    if coordinate[1] < column_heights_min[coordinate[0]]:
-    #        column_heights_min[coordinate[0]] = coordinate[1]
-    #column_heights_min = column_heights_min[1:]
-    #column_heights_min = column_heights_min[:-1]
-    #for value in range(0, x-2):
-    #    column_heights_min[value] = y - column_heights_min[value]
-    #print(column_heights_min)
-    #Number of lines Done
-    #lines=min(column_heights_min)
-    #return lines
+        game_state=state
     columns=[0]*(y)
     line=0
     for coordinate in game_state:
@@ -425,7 +372,6 @@ def calculate_completed_lines(state,piece=None,x=10,y=30):
     return line
 def total_height(state):
     array_heights = calculate_total_height(state)
-    print(array_heights)
     total = 0
     for i in range(len(array_heights)):
         total += array_heights[i]
@@ -434,8 +380,6 @@ def total_height(state):
 
 
 def heuristic(lista):  # falta completar e fazer outras funçoes   def heuristic(state)
-    print(lista)
-
     a = -0.510066
     b =  0.760666
     c = -0.35663
@@ -449,7 +393,6 @@ def heuristic(lista):  # falta completar e fazer outras funçoes   def heuristic
     bump = calculate_bumpiness (lista)
     best_pos = (a*aggr) + (c*hole) + (d*bump) + (b*comp)
     #     lista_aggr.append(best_pos)
-    print(aggr,comp,hole,bump)
     # max_valor = max(lista_aggr)
     # index_max_valor = lista_aggr.index(max_valor)
     # best_pos = pos[max_value_index]
