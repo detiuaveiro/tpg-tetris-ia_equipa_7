@@ -99,18 +99,14 @@ def possible_moves(state):   # talvez fazer assim??? depois passar a lista de mo
     return moves
 
 def possible_positions(state):
-    current_piece = peca(state)
-    if current_piece == "quadrado":
+        current_piece = peca(state)
         moves = possible_moves(state)
-        # print(moves)
         i=0
         heuristic_list = []
         while i<len(moves): 
-            lista_game = state['game']           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para  
-            move = moves[i]                      # cada state game diferente e ver qual o melhor move a fazer
-            #print(move)
-            estado_final = final_state_piece(state,move)
-            #print(estado_final)      
+            lista_game = state['game']
+            move = moves[i]
+            estado_final = final_state_piece(state,move,current_piece)
             for coord in estado_final:
                 lista_game.append(coord)    
             h = heuristic(lista_game)
@@ -120,142 +116,16 @@ def possible_positions(state):
         max_value = max(heuristic_list)
         max_value_index = heuristic_list.index(max_value) 
         best_move = moves[max_value_index]
-    elif current_piece == "I":
-        moves = possible_moves(state)
-        #print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves): 
-            lista_game = state['game']          
-            move = moves[i]                      
-            #print(move)
-            estado_final = final_state_piece(state,move)
-            #print(estado_final)       
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)     
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)  
-            i += 1
-        max_value = max(heuristic_list)  
-        max_value_index = heuristic_list.index(max_value)     
-        best_move = moves[max_value_index]
-    elif current_piece == "T":
-        moves = possible_moves(state)
-        #print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves): 
-            lista_game = state['game']          
-            move = moves[i]                      
-           # print(move)
-            estado_final = final_state_piece(state,move)
-           # print(estado_final)      
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)
-            i += 1
-        max_value = max(heuristic_list)
-        max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index]
-    elif current_piece == "S":
-        moves = possible_moves(state)
-       # print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves): 
-            lista_game = state['game']        
-            move = moves[i]                     
-           # print(move)
-            estado_final = final_state_piece(state,move)
-           # print(estado_final)    
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)
-            i += 1
-        max_value = max(heuristic_list)
-        max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index]
-    elif current_piece == "Z":
-        moves = possible_moves(state)
-       # print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves): 
-            lista_game = state['game']           
-            move = moves[i]                      
-            #print(move)
-            estado_final = final_state_piece(state,move)
-            #print(estado_final)     
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)
-                
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)
-            i += 1
-        max_value = max(heuristic_list)
-        max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index]
+        return best_move
 
-    elif current_piece == "L":
-        moves = possible_moves(state)
-       # print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves):    
-            lista_game = state['game']               
-            move = moves[i]                    
-            #print(move)
-            estado_final = final_state_piece(state,move)
-            #print(estado_final)       
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)
-            i += 1
-        max_value = max(heuristic_list)
-        max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index]
-
-    elif current_piece == "J":
-        moves = possible_moves(state)
-        #print(moves)
-        i=0
-        heuristic_list = []
-        while i<len(moves): 
-            lista_game = state['game']          
-            move = moves[i]                      
-           # print(move)
-            estado_final = final_state_piece(state,move)
-            #print(estado_final)      
-            for coord in estado_final:
-                lista_game.append(coord) 
-            h = heuristic(lista_game)
-            state['game'] = lista_game[:-4]
-            heuristic_list.append(h)
-            i += 1
-        max_value = max(heuristic_list)
-        max_value_index = heuristic_list.index(max_value) 
-        best_move = moves[max_value_index]
-    return best_move                                   
-                                        
-
-
-def final_state_piece(state,move):
-    current_piece = peca(state)
+def final_state_piece(state,move,current_piece):
     if current_piece == "quadrado":
-        print(current_piece)
+        ##print(current_piece)
         initial_state = [[3, 3], [4, 3], [3, 4], [4, 4]]
         final_state = initial_state
         i=0
         while i<len(move):
-            # print(len(move))
+            # #print(len(move))
             if move[i] == "a":
                 j=0
                 while j<len(initial_state):           # para cada coordenada
@@ -273,29 +143,29 @@ def final_state_piece(state,move):
             i += 1
 
         crosta = calculate_crust(state["game"])
-        # print(crosta)
+        # #print(crosta)
         x0 = final_state[0][0]
         x1 = final_state[1][0]
 
         crosta0 = crosta[x0-1]
         crosta1 = crosta[x1-1]
-        # print(crosta0)
-        # print(crosta1)
+        # #print(crosta0)
+        # #print(crosta1)
 
         crosta_list = [crosta0] + [crosta1]
-        # print(crosta_list)
+        # #print(crosta_list)
         minimo = min(crosta_list)
-        # print(minimo)
+        # #print(minimo)
 
         final_state[0] = [final_state[0][0], minimo]
         final_state[1] = [final_state[1][0], minimo]
         final_state[2] = [final_state[2][0], minimo - 1]
         final_state[3] = [final_state[3][0], minimo - 1]
-        # print(final_state)
+        # #print(final_state)
         return final_state
 
     elif current_piece == "I":
-        print(current_piece)
+        ##print(current_piece)
         initial_state =  [[2, 2], [3, 2], [4, 2], [5, 2]]
         final_state = initial_state
         i=0
@@ -317,7 +187,7 @@ def final_state_piece(state,move):
                 final_state[2] = aux2
                 final_state[3] = aux3
 
-                # print(final_state)
+                # #print(final_state)
 
                 houve_w = True
             
@@ -335,13 +205,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
 
         if houve_w == False:
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0]
             x1 = final_state[1][0]
             x2 = final_state[2][0]
@@ -353,16 +223,16 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta0] + [crosta1] + [crosta2] + [crosta3]
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
-            # print(minimo)
+            # #print(minimo)
 
             final_state[0] = [final_state[0][0], minimo]
             final_state[1] = [final_state[1][0], minimo]
             final_state[2] = [final_state[2][0], minimo]
             final_state[3] = [final_state[3][0], minimo]
-                # print(final_state)
+                # #print(final_state)
         else:
             crosta = calculate_crust(state["game"])
 
@@ -373,12 +243,12 @@ def final_state_piece(state,move):
             final_state[1] = [final_state[1][0], crosta0 - 2]
             final_state[2] = [final_state[2][0], crosta0 - 1]
             final_state[3] = [final_state[3][0], crosta0]
-            # print(final_state)
+            # #print(final_state)
 
         return final_state
 
     elif current_piece == "T":
-        print(current_piece)
+        ##print(current_piece)
         initial_state =  [[4, 2], [4, 3], [5, 3], [4, 4]]
         final_state = initial_state
         i=0
@@ -403,7 +273,7 @@ def final_state_piece(state,move):
                     final_state[2] = aux2
                     final_state[3] = aux3
 
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w0 = True
                 elif houve_w1 == False:     
                     aux0 = final_state[0]                  # [[4, 4], [3, 5], [4, 5], [4, 6]], depois de 2 w's
@@ -420,7 +290,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w1 = True
                 elif houve_w2 == False:     
                     aux0 = final_state[0]                  # [[4, 5], [3, 6], [4, 6], [5, 6]], depois de 3 w's
@@ -437,7 +307,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w2 = True
                 
             elif move[i] == "a":
@@ -454,13 +324,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
         
         if houve_w0 == False:    # [[4, 2], [4, 3], [5, 3], [4, 4]]  não rodou nenhuma vez
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0] 
             x2 = final_state[2][0]
             
@@ -469,7 +339,7 @@ def final_state_piece(state,move):
             crosta2 = crosta[x2-1]
 
             crost_temp = [crosta0] + [crosta2] 
-            #print(crost_temp)
+            ##print(crost_temp)
             minimo = min(crost_temp)
 
             if minimo==crosta0:
@@ -485,7 +355,7 @@ def final_state_piece(state,move):
 
         elif houve_w1 == False:    # [[3, 4], [4, 4], [5, 4], [4, 5]]   #rodou uma vez, pois houve_w0 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0] 
             x1 = final_state[1][0]
             x2 = final_state[2][0]
@@ -496,7 +366,7 @@ def final_state_piece(state,move):
             crosta2 = crosta[x2-1]
 
             crost_temp = [crosta0] + [crosta1] + [crosta2] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
             if minimo == crosta1:
@@ -512,7 +382,7 @@ def final_state_piece(state,move):
 
         elif houve_w2 == False:    # [[4, 4], [3, 5], [4, 5], [4, 6]]   #rodou duas vezes, pois houve_w1 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0] 
             x3 = final_state[3][0]
             
@@ -521,7 +391,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
             minimo = min(crost_temp)
 
             if minimo==crosta3:
@@ -537,7 +407,7 @@ def final_state_piece(state,move):
 
         else:                       # [[4, 5], [3, 6], [4, 6], [5, 6]]   #rodou tres vezes, pois houve_w2 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0] 
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -547,7 +417,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
             minimo = min(crost_temp)
 
             final_state[0] = [final_state[0][0], minimo-1]
@@ -557,7 +427,7 @@ def final_state_piece(state,move):
         return final_state 
 
     elif current_piece == "S":
-        print(current_piece)
+        ##print(current_piece)
         initial_state =  [[4, 2], [4, 3], [5, 3], [5, 4]]
         final_state = initial_state
         i=0
@@ -579,7 +449,7 @@ def final_state_piece(state,move):
                 final_state[2] = aux2
                 final_state[3] = aux3
 
-                # print(final_state)
+                # #print(final_state)
 
                 houve_w = True
             
@@ -597,13 +467,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
         
         if houve_w==False:    # [[4, 2], [4, 3], [5, 3], [5, 4]]
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0]
             x3 = final_state[3][0]
 
@@ -611,10 +481,10 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta3]
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
-            # print(minimo)
+            # #print(minimo)
             if minimo==crosta3:
                 final_state[0] = [final_state[0][0], minimo-2]
                 final_state[1] = [final_state[1][0], minimo-1]
@@ -627,7 +497,7 @@ def final_state_piece(state,move):
                 final_state[3] = [final_state[3][0], minimo+1]
         else:                                                       #[[4, 4], [5, 4], [3, 5], [4, 5]]
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0]
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -638,10 +508,10 @@ def final_state_piece(state,move):
            
 
             crost_temp = [crosta1] + [crosta2] + [crosta3]
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
-            # print(minimo)
+            # #print(minimo)
             if minimo==crosta2 or minimo==crosta3:
                 final_state[0] = [final_state[0][0], minimo-1]
                 final_state[1] = [final_state[1][0], minimo-1]
@@ -655,7 +525,7 @@ def final_state_piece(state,move):
         return final_state
 
     elif current_piece == "Z":
-        print(current_piece)
+        ##print(current_piece)
         initial_state =  [[4, 2], [3, 3], [4, 3], [3, 4]]
         final_state = initial_state
         i=0
@@ -677,7 +547,7 @@ def final_state_piece(state,move):
                 final_state[2] = aux2
                 final_state[3] = aux3
 
-                # print(final_state)
+                # #print(final_state)
 
                 houve_w = True
             
@@ -695,13 +565,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
         
         if houve_w==False:     # [[4, 2], [3, 3], [4, 3], [3, 4]]
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x2 = final_state[2][0]
             x3 = final_state[3][0]
 
@@ -709,10 +579,10 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta2] + [crosta3]
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
-            # print(minimo)
+            # #print(minimo)
             if minimo==crosta3:
                 final_state[0] = [final_state[0][0], minimo-2]
                 final_state[1] = [final_state[1][0], minimo-1]
@@ -725,7 +595,7 @@ def final_state_piece(state,move):
                 final_state[3] = [final_state[3][0], minimo+1]
         else:                                                       #[[3, 4], [4, 4], [4, 5], [5, 5]] 
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0]
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -735,10 +605,10 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta0] + [crosta2] + [crosta3]
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
-            # print(minimo)
+            # #print(minimo)
             if minimo==crosta2 or minimo==crosta3:
                 final_state[0] = [final_state[0][0], minimo-1]
                 final_state[1] = [final_state[1][0], minimo-1]
@@ -752,7 +622,7 @@ def final_state_piece(state,move):
         return final_state
 
     elif current_piece == "L":
-        print(current_piece)
+        #(current_piece)
         initial_state =  [[4, 2], [4, 3], [4, 4], [5, 4]] 
         final_state = initial_state
         i=0
@@ -777,7 +647,7 @@ def final_state_piece(state,move):
                     final_state[2] = aux2
                     final_state[3] = aux3
 
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w0 = True
                 elif houve_w1 == False:                    # [[3, 4], [4, 4], [5, 4], [3, 5]]
                     aux0 = final_state[0]                  # [[3, 4], [4, 4], [4, 5], [4, 6]], depois de 2 w's 
@@ -794,7 +664,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w1 = True
                 elif houve_w2 == False:                    # [[3, 4], [4, 4], [4, 5], [4, 6]]
                     aux0 = final_state[0]                  # [[5, 5], [3, 6], [4, 6], [5, 6]], depois de 3 w's 
@@ -811,7 +681,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w2 = True
                 
             elif move[i] == "a":
@@ -828,13 +698,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
         
         if houve_w0 == False:    # [[4, 2], [4, 3], [4, 4], [5, 4]]  não rodou nenhuma vez
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x2 = final_state[2][0] 
             x3 = final_state[3][0]
             
@@ -843,7 +713,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
             minimo = min(crost_temp)
 
             final_state[0] = [final_state[0][0], minimo-2]
@@ -853,7 +723,7 @@ def final_state_piece(state,move):
 
         elif houve_w1 == False:    # [[3, 4], [4, 4], [5, 4], [3, 5]]   #rodou uma vez, pois houve_w0 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0]
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -863,7 +733,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
 
@@ -880,7 +750,7 @@ def final_state_piece(state,move):
 
         elif houve_w2 == False:    # # [[3, 4], [4, 4], [4, 5], [4, 6]]   #rodou duas vezes, pois houve_w1 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0] 
             x3 = final_state[3][0]
             
@@ -889,7 +759,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta0] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
 
@@ -914,7 +784,7 @@ def final_state_piece(state,move):
 
         else:                       # [[5, 5], [3, 6], [4, 6], [5, 6]]   #rodou tres vezes, pois houve_w2 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0] 
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -924,7 +794,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
             minimo = min(crost_temp)
 
             final_state[0] = [final_state[0][0], minimo-1]
@@ -934,7 +804,7 @@ def final_state_piece(state,move):
         return final_state
 
     elif current_piece == "J":
-        print(current_piece)
+        ##print(current_piece)
         initial_state =  [[4, 2], [5, 2], [4, 3], [4, 4]]
         final_state = initial_state
         i=0
@@ -959,7 +829,7 @@ def final_state_piece(state,move):
                     final_state[2] = aux2
                     final_state[3] = aux3
 
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w0 = True
                 elif houve_w1 == False:                    # [[3, 4], [4, 4], [5, 4], [5, 5]]
                     aux0 = final_state[0]                  # [[4, 4], [4, 5], [3, 6], [4, 6]], depois de 2 w's 
@@ -976,7 +846,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w1 = True
                 elif houve_w2 == False:                    # [[4, 4], [4, 5], [3, 6], [4, 6]]
                     aux0 = final_state[0]                  # [[3, 5], [3, 6], [4, 6], [5, 6]], depois de 3 w's 
@@ -993,7 +863,7 @@ def final_state_piece(state,move):
                     final_state[1] = aux1
                     final_state[2] = aux2
                     final_state[3] = aux3
-                    # print(final_state)
+                    # #print(final_state)
                     houve_w2 = True
                 
             elif move[i] == "a":
@@ -1010,13 +880,13 @@ def final_state_piece(state,move):
                     aux[0] = aux[0] + 1               # x vai 1 vez para a direita
                     final_state[j] = [aux[0], final_state[j][1]]
                     j += 1
-                    # print("AQUI------")
-                    # print(final_state)
+                    # #print("AQUI------")
+                    # #print(final_state)
             i += 1
         
         if houve_w0 == False:    # [[4, 2], [5, 2], [4, 3], [4, 4]]  não rodou nenhuma vez
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0] 
             x3 = final_state[3][0]
             
@@ -1025,7 +895,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
 
@@ -1050,7 +920,7 @@ def final_state_piece(state,move):
 
         elif houve_w1 == False:    # [[3, 4], [4, 4], [5, 4], [5, 5]]   #rodou uma vez, pois houve_w0 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x0 = final_state[0][0]
             x1 = final_state[1][0]
             x3 = final_state[3][0]
@@ -1060,7 +930,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta0] + [crosta1] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
 
@@ -1077,7 +947,7 @@ def final_state_piece(state,move):
 
         elif houve_w2 == False:    # [[4, 4], [4, 5], [3, 6], [4, 6]]  #rodou duas vezes, pois houve_w1 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x2 = final_state[2][0] 
             x3 = final_state[3][0]
             
@@ -1086,7 +956,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
 
             minimo = min(crost_temp)
 
@@ -1096,9 +966,9 @@ def final_state_piece(state,move):
             final_state[3] = [final_state[3][0], minimo]
             
 
-        else:                       # [[3, 5], [3, 6], [4, 6], [5, 6]]   #rodou tres vezes, pois houve_w2 deu True no if acima
+        else:     # [[3, 5], [3, 6], [4, 6], [5, 6]]   #rodou tres vezes, pois houve_w2 deu True no if acima
             crosta = calculate_crust(state["game"])
-            # print(crosta)
+            # #print(crosta)
             x1 = final_state[1][0] 
             x2 = final_state[2][0]
             x3 = final_state[3][0]
@@ -1108,7 +978,7 @@ def final_state_piece(state,move):
             crosta3 = crosta[x3-1]
 
             crost_temp = [crosta1] + [crosta2] + [crosta3] 
-            # print(crost_temp)
+            # #print(crost_temp)
             minimo = min(crost_temp)
 
             final_state[0] = [final_state[0][0], minimo-1]
@@ -1117,17 +987,6 @@ def final_state_piece(state,move):
             final_state[3] = [final_state[3][0], minimo]
         return final_state
 
-                
-            
-
-
-
-
-
-
-
-
-    # elif   # falta fazer para restantes peças  (as restantes também têm o move[i] = "w")
 
 def calculate_total_height(state, x=10, y=30):
     column_heights_min= [y] * x
@@ -1139,29 +998,15 @@ def calculate_total_height(state, x=10, y=30):
 
     return column_heights_min
 
-# def calculate_holes(state, x=10, y=30):
-#     count = [0] * x
-#     max_height = [y] * x
-#     num_holes = 0
-#     for coordinate in state: #mudei
-#         count[coordinate[0]]+=1
-#         if coordinate[1] < max_height[coordinate[0]]:
-#             max_height[coordinate[0]] = coordinate[1]
-#     for value in range(0,x):
-#         num_holes += y - (count[value]+max_height[value])
-#        # print(count[value],max_height[value])
-#     return num_holes
-
-def calculate_holes(state, x=10, y=30):
+def calculate_holes(state, x_max=10, y_max=30):
     num_holes = 0
-
-    for i in range(1,9):
+    for i in range(1,x_max-1):
         col = [0]*33
         for fragment in state:
             x,y = fragment
-            if x==i and y<30:
-                col[29-y]=1
-        j=29
+            if x==i and y<y_max:
+                col[(y_max-1)-y]=1
+        j=(y_max-1)
         while j>=0:
             if col[j]==1:
                 while j>=0:
@@ -1172,10 +1017,9 @@ def calculate_holes(state, x=10, y=30):
             j=j-1
     return num_holes
 
-def calculate_bumpiness(state, x=10, y=30):
-    column_heights = calculate_total_height(state, x, y)
+def calculate_bumpiness(state,column_heights, x=10, y=30):
     column_heights = column_heights[1:]
-    column_heights = column_heights[:-1]  # remover colunas das bordas 
+    column_heights = column_heights[:-1]
 
     diffs = 0
     for value in range(len(column_heights) - 1):
@@ -1183,17 +1027,6 @@ def calculate_bumpiness(state, x=10, y=30):
 
     return diffs
 
-
-def calculate_free_spots(state, x=10, y=30):
-    y_max = y - max(calculate_total_height(state, x, y))-1
-    count = []
-    for j in range(y_max, y):
-        for i in range(1, x-1):    # tirei indices das bordas
-            coordinate = [i, j]
-            if coordinate not in state['game']:
-                count.append(coordinate)
-    count.sort()
-    return count
 
 def calculate_crust(state, x=10, y=30):
     heights = calculate_total_height(state, x, y)
@@ -1205,33 +1038,69 @@ def calculate_crust(state, x=10, y=30):
     crust = crust[:-1]  # remover bordas
     return crust
 
+
+
+
+def calculate_completed_lines(state,x=10,y=30):
+    game_state= state
+    columns=[0]*(y)
+    line=0
+    for coordinate in game_state:
+        columns[coordinate[1]-1]+=1
+    columns = columns[:-1]
+    for value in columns:
+        if value==x-2:
+            line+=1
+    return line
+
+def total_height(state,array_heights):
+    #print(array_heights)
+    total = 0
+    for i in range(len(array_heights)):
+        total += array_heights[i]
+    return total
+
+def heuristic(lista):
+    # #print(lista)
+
+    a = -0.510066
+    b =  0.760666
+    c = -0.35663
+    d = -0.184483
+    tt_height=calculate_total_height(lista)
+    aggr = total_height(lista,tt_height)
+    comp = calculate_completed_lines(lista)
+    hole = calculate_holes(lista)
+    bump = calculate_bumpiness (lista,tt_height)
+    best_pos = (a*aggr) + (c*hole) + (d*bump) + (b*comp)
+    # lista_aggr.append(best_pos)
+    # #print(aggr,comp,hole,bump)
+    # max_valor = max(lista_aggr)
+    # index_max_valor = lista_aggr.index(max_valor)
+    # best_pos = pos[max_value_index]
+
+    return best_pos
+
 def piece_equation(piece,x,y):
     equation=[]
-    #if state['next_pieces'][0] == [[1, 2], [2, 2], [1, 3], [2, 3]]:     #Q
     if piece == "Q":
         return [[x-1,y-1],[x,y-1],[x-1,y],[x,y]]
 
-    #elif state['next_pieces'][0]  == [[0, 1], [1, 1], [2, 1], [3, 1]]:  #I
     elif piece == "I":
         return [[x,y],[x+1,y],[x+2,y],[x+3,y]]
 
-    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [3, 3]]:  #S
     elif piece == "S":
         return [[x-1,y-2],[x-1,y-1],[x,y-1],[x,y+-1]]
 
-    #elif state['next_pieces'][0]  == [[2, 1], [1, 2], [2, 2], [1, 3]]:  #Z
     elif piece == "Z":
         return [[x+1,y-2],[x,y-1],[x+1,y-1],[x,y]]
 
-    #elif state['next_pieces'][0] == [[2, 1], [3, 1], [2, 2], [2, 3]]:   #L
     elif piece == "L":
         return [[x-1,y-2],[x-1,y-1],[x-1,y],[x,y]]
 
-    #elif state['next_pieces'][0] == [[2, 1], [2, 2], [2, 3], [3, 3]]:   #J
     elif piece == "J":
         return [[x,y-2],[x+1,y-2],[x,y-1],[x,y]]
 
-    #elif state['next_pieces'][0]  == [[2, 1], [2, 2], [3, 2], [2, 3]]:  #T
     elif piece== "T":
         return [[x,y-2],[x,y-1],[x+1,y-1],[x,y]]
     return equation
@@ -1252,10 +1121,7 @@ def nextpiece_type(state):
     elif state['next_pieces'][0] == [[2, 1], [2, 2], [3, 2], [2, 3]]:   # T
         return "T"
 
-
-
 def calculate_possible_spots(state, x=10, y=30):
-    free_spots = calculate_free_spots(state, x=10, y=30)
     crust = calculate_crust(state, x=10, y=30)
     possible_spots = []
     next_piece = nextpiece_type(state)
@@ -1270,56 +1136,13 @@ def calculate_possible_spots(state, x=10, y=30):
     return possible_spots
 
 
-def calculate_completed_lines(state,piece=None,x=10,y=30):
-    if piece:
-        game_state=state["game"]
-        for coordinate in piece:
-            game_state.append(coordinate)
-    else:
-        game_state=state        
-    columns=[0]*(y)
-    line=0
-    for coordinate in game_state:
-        columns[coordinate[1]-1]+=1
-    columns = columns[:-1]
-    for value in columns:
-        if value==x-2:
-            line+=1
-    return line
-def total_height(state):
-    array_heights = calculate_total_height(state)
-    print(array_heights)
-    total = 0
-    for i in range(len(array_heights)):
-        total += array_heights[i]
-    return total
-
-
-
-def heuristic(lista):  # falta completar e fazer outras funçoes   def heuristic(state)
-    # print(lista)
-
-    # a = -0.510066
-    # b =  0.760666
-    # c = -0.35663
-    # d = -0.184483
-
-    a = -0.510066
-    b =  0.760666
-    c = -0.35663
-    d = -0.184483
-
-    # for i in pos:  # pos é a lista de movimentos possiveis/coordenadas finais possiveis  (falta funçao)
-
-    aggr = total_height(lista)
-    comp = calculate_completed_lines(lista) #   , falta funçao pra calcular completed lines
-    hole = calculate_holes(lista)
-    bump = calculate_bumpiness (lista)
-    best_pos = (a*aggr) + (c*hole) + (d*bump) + (b*comp)
-    #     lista_aggr.append(best_pos)
-    # print(aggr,comp,hole,bump)
-    # max_valor = max(lista_aggr)
-    # index_max_valor = lista_aggr.index(max_valor)
-    # best_pos = pos[max_value_index]
-
-    return best_pos
+def calculate_free_spots(state, x=10, y=30):
+    y_max = y - max(calculate_total_height(state, x, y))-1
+    count = []
+    for j in range(y_max, y):
+        for i in range(1, x-1):    # tirei indices das bordas
+            coordinate = [i, j]
+            if coordinate not in state['game']:
+                count.append(coordinate)
+    count.sort()
+    return count
