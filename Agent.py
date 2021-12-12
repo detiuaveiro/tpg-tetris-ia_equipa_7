@@ -28,8 +28,8 @@ def next_key(state):
     
     return keys
 
-def possible_moves(state,peca):   # talvez fazer assim??? depois passar a lista de movimentos possiveis de cada peça para outra funçao, que vai calcular as coordenadas finais para cada movimento dependendo
-    moves = []               # das posiçoes já existentes no game, e usar função da heuristica pra determinar qual o melhor movimento?
+def possible_moves(state,peca):
+    moves = []
     if peca == "quadrado":
         moves = [["s"], ["a","s"], ["a","a","s"], ["d","s"], ["d", "d","s"], ["d", "d", "d","s"], ["d", "d", "d", "d","s"]]
     elif peca == "L":
@@ -51,8 +51,8 @@ def possible_positions(state,peca):
     i=0
     heuristic_list = []
     while i<len(moves): 
-        lista_game = state['game']           #dependendo dos varios estados finais para cada move, adicionar cada estado final de cada move ao state game, calcular heuristicas para  
-        move = moves[i]                      # cada state game diferente e ver qual o melhor move a fazer
+        lista_game = state['game']
+        move = moves[i]
         estado_final = final_state_piece(state,move,peca)     
         for coord in estado_final:
             lista_game.append(coord)    
@@ -916,19 +916,13 @@ def calculate_crust(state, x=10, y=30):
     heights = calculate_total_height(state, x, y)
     crust= [0]* x
     for i in range(0, x):
-        if [i,y-heights[i]-1] not in state:
-                crust[i] = (y-heights[i]-1)
+            crust[i] = (y-heights[i]-1)
     crust = crust[1:]
     crust = crust[:-1]  
     return crust
 
-def calculate_completed_lines(state,piece=None,x=10,y=30):
-    if piece:
-        game_state=state["game"]
-        for coordinate in piece:
-            game_state.append(coordinate)
-    else:
-        game_state=state        
+def calculate_completed_lines(game_state,piece=None,x=10,y=30):
+
     columns=[0]*(y)
     line=0
     for coordinate in game_state:
@@ -945,15 +939,13 @@ def total_height(state):
         total += array_heights[i]
     return total
 
-
-
 def heuristic(lista):  
 
     a = -0.510066
     b =  0.760666
     c = -0.35663
     d = -0.184483
-
+    
     aggr = total_height(lista)
     comp = calculate_completed_lines(lista)
     hole = calculate_holes(lista)
